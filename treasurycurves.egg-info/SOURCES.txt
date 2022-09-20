@@ -1,5 +1,6 @@
 LICENSE
 README.md
+setup.cfg
 setup.py
 treasury.py
 treasurycurves.egg-info/PKG-INFO
