@@ -10,6 +10,7 @@ one can find yield curves dating back to the 90's.
 Access data for a particular date using ``` curves("2022-08-08") ```.
 curves will find the nearest valid date (weekday) and returns a pandas dataframes of all curves
 available on that date or nearest to it. calling ``` curves() ``` will use the current date.
+Optionally specify ``` curves(allow_missing=True) ``` to keep years with missing data.
 
 Alternatively, you can retrieve all data by calling ``` download() ```.
 
