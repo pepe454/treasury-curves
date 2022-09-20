@@ -1,2 +1,4 @@
 venv/
 exports/*
+.vscode/
+__pycache__/
