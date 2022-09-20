@@ -7,7 +7,7 @@ Author: Danny Fryer
 Author-email: 17fryerd@gmail.com
 License: UNKNOWN
 Platform: UNKNOWN
-Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.9
 Classifier: Development Status :: 4 - Beta
 Classifier: License :: MIT License
 License-File: LICENSE

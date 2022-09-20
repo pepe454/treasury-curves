@@ -10,10 +10,10 @@ setuptools.setup(
     py_modules=["treasury"],
     url="https://github.com/pepe454/treasury-curves",
     entry_points={
-        "console_scripts": ["treasury-curves=treasurycurves.treasury.__main__"]
+        "console_scripts": ["treasury=treasury:main"]
     },
     classifiers=[
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.9",
         "Development Status :: 4 - Beta",
         "License :: MIT License",
     ],

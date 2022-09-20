@@ -121,16 +121,8 @@ def parse_csv_request(request):
     return pd.read_csv(StringIO(request.text))
 
 
-def main(args):
+def main():
     """carry out all treasury lib api functions according to cli args"""
-    curve_data = curves(date=args.date, allow_missing=args.allowna)
-    if args.plot:
-        plot(curve_data, num_years=args.years, start_year=args.start, end_year=args.end)
-    if args.output is not None:
-        export(curve_data, args.output)
-
-
-if __name__ == "__main__":
     parser = ArgumentParser(description="treasury - query and analyze US Treasury yield data")
 
     # filter arguments
@@ -147,4 +139,11 @@ if __name__ == "__main__":
 
     # analyze!
     args = parser.parse_args()
-    main(args)
+    curve_data = curves(date=args.date, allow_missing=args.allowna)
+    if args.plot:
+        plot(curve_data, num_years=args.years, start_year=args.start, end_year=args.end)
+    if args.output is not None:
+        export(curve_data, args.output)
+
+if __name__ == "__main__":
+    main()
