@@ -59,12 +59,13 @@ def plot(raw_curve_data, num_years=10, start_year=None, end_year=None):
 
 def filter_curves(curve_data, num_years=10, start_year=None, end_year=None):
     """filter treasury curve data using year filters"""
-    start_year = curve_data.index.min() if start_year is None else int(start_year)
-    end_year = curve_data.index.max() if end_year is None else int(end_year)
-    assert start_year <= end_year, "start_year must be earlier than end_year"
+    start = curve_data.index.min() if start_year is None else int(start_year)
+    end = curve_data.index.max() if end_year is None else int(end_year)
+    assert start <= end, "start_year must be earlier than end_year"
 
     # use start and end year to filter the index
-    curves = curve_data.sort_values(by="Date", ascending=False)
+    only_start = start_year is not None and end_year is None
+    curves = curve_data.sort_values(by="Date", ascending=only_start)
     curves = curves[(curves.index >= start_year) & (curves.index <= end_year)]
 
     # bound num years by [1, 10] and get the first num_years rows
