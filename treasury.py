@@ -1,14 +1,15 @@
 import functools
 from datetime import datetime, timedelta
 from io import StringIO
-from tracemalloc import start
 
+import matplotlib.pyplot as plt
 import pandas as pd
 import requests
 from dateutil.relativedelta import relativedelta
 
 DATE_FMT = "%Y-%m-%d"
 COLUMNS = ["1 Yr", "2 Yr", "5 Yr", "10 Yr", "20 Yr", "30 Yr"]
+
 
 def curves(date=datetime.today()):
     """get treasury curves for today or a specific date"""
@@ -31,8 +32,25 @@ def curves(date=datetime.today()):
     return year_samples.reset_index().set_index(keys="Year")
 
 
-def plot(curve_data, num_years=10, start_year=None, end_year=None):
+def plot(raw_curve_data, num_years=10, start_year=None, end_year=None):
     """plot treasury curves over the past num_years. alternatively use start_year, end_year"""
+    curve_data = filter_curves(raw_curve_data, num_years, start_year, end_year)
+    curve_data = curve_data.drop("Date", axis=1)[COLUMNS]
+
+    # format the ploat and the legend to look nice
+    plt.close("all")
+    start, end = curve_data.index.min(), curve_data.index.max()
+    title = f"US Treasury Yields {start}-{end}"
+    chart = curve_data.T.plot(xlabel="Maturity", ylabel="Yield", title=title, figsize=(10, 5))
+    chart.legend(bbox_to_anchor=(1.0, 1.0))
+
+    # show the plot and done!
+    plt.show()
+    return curve_data
+
+
+def filter_curves(curve_data, num_years=10, start_year=None, end_year=None):
+    """filter treasury curve data using year filters"""
     start_year = curve_data.index.min() if start_year is None else int(start_year)
     end_year = curve_data.index.max() if end_year is None else int(end_year)
     assert start_year <= end_year, "start_year must be earlier than end_year"
@@ -78,3 +96,7 @@ def year_url(date):
 def parse_csv_request(request):
     return pd.read_csv(StringIO(request.text)).dropna(subset=COLUMNS)
 
+
+if __name__ == "__main__":
+    curve_data = curves()
+    plot(curve_data)
