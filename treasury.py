@@ -1,5 +1,10 @@
+"""Treasury Lib - Carry out various analyses on US Treasury Data"""
+
 import functools
-from datetime import datetime, timedelta
+import os
+from argparse import ArgumentParser
+from ast import arg
+from datetime import datetime
 from io import StringIO
 
 import matplotlib.pyplot as plt
@@ -11,9 +16,10 @@ DATE_FMT = "%Y-%m-%d"
 COLUMNS = ["1 Yr", "2 Yr", "5 Yr", "10 Yr", "20 Yr", "30 Yr"]
 
 
-def curves(date=datetime.today()):
+def curves(date=None, allow_missing=False):
     """get treasury curves for today or a specific date"""
-    date = date if isinstance(date, datetime) else datetime.strptime(DATE_FMT)
+    date = datetime.today().strftime(DATE_FMT) if date is None else date
+    date = datetime.strptime(date, DATE_FMT)
     dt_str = date.strftime(DATE_FMT)
     dt_range = pd.date_range(end=dt_str, periods=50, freq="12M").shift(date.day, freq="D")
 
@@ -22,7 +28,8 @@ def curves(date=datetime.today()):
     ranges = functools.reduce(lambda r1, r2: r1.append(r2), date_ranges)
 
     # retrieve curve data, filter with date ranges, and sample by year
-    curve_data = download()
+    drop_columns = [] if allow_missing else COLUMNS
+    curve_data = download().dropna(subset=drop_columns)
     curve_data = curve_data[curve_data.index.isin(ranges)]
     curve_years = curve_data.groupby(curve_data.index.year)
     year_samples = curve_years.apply(lambda year: year.sample(n=1))
@@ -35,12 +42,13 @@ def curves(date=datetime.today()):
 def plot(raw_curve_data, num_years=10, start_year=None, end_year=None):
     """plot treasury curves over the past num_years. alternatively use start_year, end_year"""
     curve_data = filter_curves(raw_curve_data, num_years, start_year, end_year)
+    date = curve_data.Date.max().strftime("%B %d")
     curve_data = curve_data.drop("Date", axis=1)[COLUMNS]
 
     # format the ploat and the legend to look nice
     plt.close("all")
     start, end = curve_data.index.min(), curve_data.index.max()
-    title = f"US Treasury Yields {start}-{end}"
+    title = f"US Treasury Yields {start}-{end}, {date}"
     chart = curve_data.T.plot(xlabel="Maturity", ylabel="Yield", title=title, figsize=(10, 5))
     chart.legend(bbox_to_anchor=(1.0, 1.0))
 
@@ -56,12 +64,28 @@ def filter_curves(curve_data, num_years=10, start_year=None, end_year=None):
     assert start_year <= end_year, "start_year must be earlier than end_year"
 
     # use start and end year to filter the index
-    sorted = curve_data.sort_values(by="Date", ascending=False)
-    filtered = sorted[(sorted.index >= start_year) & (sorted.index <= end_year)]
+    curves = curve_data.sort_values(by="Date", ascending=False)
+    curves = curves[(curves.index >= start_year) & (curves.index <= end_year)]
 
     # bound num years by [1, 10] and get the first num_years rows
-    num_years = max(10, min(num_years, 1))
-    return filtered.head(num_years)
+    num_years = min(10, max(num_years, 1))
+    return curves.head(num_years)
+
+
+def export(curves_data, file_extension="csv"):
+    """export curves data analysis to """
+    assert file_extension in {"csv", "xlsx"}, "unsupported extension, use csv or xlsx"
+    file_dir = os.path.dirname(os.path.realpath(__file__))
+    export_dir = os.path.join(file_dir, "exports")
+    if not os.path.exists(export_dir):
+        os.makedirs(export_dir)
+
+    # build the filename and save curve data
+    date = datetime.today().strftime("%Y%m%d")
+    file_name = f"yield_curve_{date}.{file_extension}"
+    file_path = os.path.join(export_dir, file_name)
+    export_function = pd.DataFrame.to_csv if file_extension == "csv" else pd.DataFrame.to_excel
+    export_function(curves_data, file_path)
 
 
 def download():
@@ -94,9 +118,33 @@ def year_url(date):
 
 
 def parse_csv_request(request):
-    return pd.read_csv(StringIO(request.text)).dropna(subset=COLUMNS)
+    return pd.read_csv(StringIO(request.text))
+
+
+def main(args):
+    """carry out all treasury lib api functions according to cli args"""
+    curve_data = curves(date=args.date, allow_missing=args.allowna)
+    if args.plot:
+        plot(curve_data, num_years=args.years, start_year=args.start, end_year=args.end)
+    if args.output is not None:
+        export(curve_data, args.output)
 
 
 if __name__ == "__main__":
-    curve_data = curves()
-    plot(curve_data)
+    parser = ArgumentParser(description="treasury - query and analyze US Treasury yield data")
+
+    # filter arguments
+    parser.add_argument("-a", "--allowna", action="store_true", help="Allow NaN values")
+    parser.add_argument("-s", "--start", type=int, help="Year to start analysis")
+    parser.add_argument("-e", "--end", type=int, help="Year to end analysis")
+    parser.add_argument("-d", "--date", type=str, help="Date in YYYY-MM-DD to analyze")
+    parser.add_argument("-y", "--years", type=int, default=10, help="Num years before end to analyze")
+
+    # output argument
+    parser.add_argument("-p", "--plot", action="store_true", help="Plot yield curves")
+    help_msg = "File extension to save data (csv or xlsx), leave empty to avoid saving file"
+    parser.add_argument("-o", "--output", type=str, help=help_msg)
+
+    # analyze!
+    args = parser.parse_args()
+    main(args)

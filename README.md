@@ -3,7 +3,9 @@
 Using the Developer API found at [treasury.gov](https://home.treasury.gov/developer-notice-xml-changes),
 one can find yield curves dating back to the 90's.
 
-## Selecting and plotting data
+&nbsp;
+
+# Selecting and plotting data
 
 Access data for a particular date using ``` curves("2022-08-08") ```.
 curves will find the nearest valid date (weekday) and returns a pandas dataframes of all curves
@@ -18,3 +20,28 @@ become inundated with yield curve data.
 
 Save your data in a spreadsheet using ``` export(curves_data, file_extension="csv") ``` and specify
 "csv" or "xlsx" to determine the file type.
+
+&nbsp;
+
+# Using treasury module from the Command Line
+```
+$ python treasury.py --help
+usage: treasury.py [-h] [-a] [-s START] [-e END] [-d DATE] [-y YEARS] [-p] [-o OUTPUT]
+
+treasury - query and analyze US Treasury yield data
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -a, --allowna         Allow NaN values
+  -s START, --start START
+                        Year to start analysis
+  -e END, --end END     Year to end analysis
+  -d DATE, --date DATE  Date in YYYY-MM-DD to analyze
+  -y YEARS, --years YEARS
+                        Num years before end to analyze
+  -p, --plot            Plot yield curves
+  -o OUTPUT, --output OUTPUT
+                        File extension to save data (csv or xlsx), leave empty to avoid saving file
+```
+
+&nbsp;
