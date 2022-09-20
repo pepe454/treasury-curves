@@ -1,0 +1,3 @@
+[console_scripts]
+treasury-curves = treasurycurves.treasury.__main__
+

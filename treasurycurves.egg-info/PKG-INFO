@@ -1,0 +1,16 @@
+Metadata-Version: 2.1
+Name: treasurycurves
+Version: 1.0.0
+Summary: query and analyze US Treasury yield data
+Home-page: https://github.com/pepe454/treasury-curves
+Author: Danny Fryer
+Author-email: 17fryerd@gmail.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: MIT License
+License-File: LICENSE
+
+UNKNOWN
+

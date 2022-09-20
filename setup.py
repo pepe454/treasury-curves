@@ -7,6 +7,7 @@ setuptools.setup(
     author_email="17fryerd@gmail.com",
     description=("query and analyze US Treasury yield data"),
     packages=setuptools.find_packages(),
+    py_modules=["treasury"],
     url="https://github.com/pepe454/treasury-curves",
     entry_points={
         "console_scripts": ["treasury-curves=treasurycurves.treasury.__main__"]

@@ -24,12 +24,12 @@ Save your data in a spreadsheet using ``` export(curves_data, file_extension="cs
 
 &nbsp;
 
-# Using treasury module from the Command Line
+# Using treasurycurves module from the Command Line
 ```
 $ python treasury.py --help
 usage: treasury.py [-h] [-a] [-s START] [-e END] [-d DATE] [-y YEARS] [-p] [-o OUTPUT]
 
-treasury - query and analyze US Treasury yield data
+treasurycurves - query and analyze US Treasury yield data
 
 optional arguments:
   -h, --help            show this help message and exit

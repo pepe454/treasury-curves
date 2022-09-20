@@ -1,4 +1,4 @@
-"""Treasury Lib - Carry out various analyses on US Treasury Data"""
+"""treasury - carry out various analyses on US Treasury Data"""
 
 import functools
 import os
