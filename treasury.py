@@ -73,7 +73,7 @@ def filter_curves(curve_data, num_years=10, start_year=None, end_year=None):
 
 
 def export(curves_data, file_extension="csv"):
-    """export curves data analysis to """
+    """export curves data analysis to a desired output format"""
     assert file_extension in {"csv", "xlsx"}, "unsupported extension, use csv or xlsx"
     file_dir = os.path.dirname(os.path.realpath(__file__))
     export_dir = os.path.join(file_dir, "exports")
