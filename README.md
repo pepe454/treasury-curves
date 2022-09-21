@@ -34,8 +34,25 @@ Save your data in a spreadsheet using ``` export(curves_data, file_extension="cs
 &nbsp;
 
 # Using treasurycurves module from the Command Line
+
+Install through pip:
+
+``` pip install treasury-curves ```
+
+Once installing, you can run the entrypoint:
+
+``` treasury --help ```
+
+Use the module directly:
+
+``` import treasury  ```
+
+Working inside the repository
+
+``` python treasury.py --help ```
+
 ```
-$ python treasury.py --help
+
 usage: treasury.py [-h] [-a] [-s START] [-e END] [-d DATE] [-y YEARS] [-p] [-o OUTPUT]
 
 treasurycurves - query and analyze US Treasury yield data
