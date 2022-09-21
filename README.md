@@ -1,11 +1,20 @@
-# Treasury Curve Data
+[![Treasury Curves Logo](logo.png)](logo.png)
 
-Using the Developer API found at [treasury.gov](https://home.treasury.gov/developer-notice-xml-changes),
-one can find yield curves dating back to the 90's.
+
+[![ci](https://github.com/pepe454/treasury-curves/actions/workflows/ci.yml/badge.svg)](https://github.com/pepe454/treasury-curves/actions/workflows/ci.yml)
+[![PyPi Version](https://img.shields.io/pypi/v/treasurycurves.svg)](https://pypi.python.org/pypi/treasurycurves/)
+[![Package Status](https://img.shields.io/pypi/status/treasurycurves.svg)](https://pypi.org/project/treasurycurves/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
+
+Access and chart US Treasury Curve data
 
 &nbsp;
 
 # Selecting and plotting data
+
+Using the Developer API found at [treasury.gov](https://home.treasury.gov/developer-notice-xml-changes),
+one can find yield curves dating back to the 90's.
 
 Access data for a particular date using ``` curves("2022-08-08") ```.
 curves will find the nearest valid date (weekday) and returns a pandas dataframes of all curves

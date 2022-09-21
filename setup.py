@@ -1,11 +1,19 @@
 import setuptools
 
+
+def readme():
+    with open('README.md') as f:
+        return f.read()
+
+
 setuptools.setup(
     name="treasurycurves",
-    version="1.0.0",
+    version="1.0.2",
     author="Danny Fryer",
     author_email="17fryerd@gmail.com",
     description=("query and analyze US Treasury yield data"),
+    long_description=readme(),
+    long_description_content_type='text/markdown',
     packages=setuptools.find_packages(),
     py_modules=["treasury"],
     license="MIT",
@@ -16,8 +24,12 @@ setuptools.setup(
     },
     classifiers=[
         "Programming Language :: Python :: 3.9",
+        "Topic :: Office/Business :: Financial :: Investment",
+        "Operating System :: Microsoft",
+        "Natural Language :: English",
         "Development Status :: 4 - Beta",
-        "License :: MIT License",
+        "License :: Freely Distributable",
+        "Framework :: Pytest",
     ],
     install_requires=[
         "pandas",
