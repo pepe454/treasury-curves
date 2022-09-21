@@ -9,6 +9,8 @@
 
 Access and chart US Treasury Curve data
 
+Full document can be found at [treasury-curves.readthedocs.io](https://treasury-curves.readthedocs.io/en/latest/)
+
 &nbsp;
 
 # Selecting and plotting data
