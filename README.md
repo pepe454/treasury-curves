@@ -1,4 +1,4 @@
-[![Treasury Curves Logo](logo.png)](logo.png)
+[![Treasury Curves Logo](.github/logo.png)](.github/logo.png)
 
 
 [![ci](https://github.com/pepe454/treasury-curves/actions/workflows/ci.yml/badge.svg)](https://github.com/pepe454/treasury-curves/actions/workflows/ci.yml)
