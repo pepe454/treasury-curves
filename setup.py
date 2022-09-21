@@ -8,7 +8,7 @@ def readme():
 
 setuptools.setup(
     name="treasurycurves",
-    version="1.0.2",
+    version="1.0.3",
     author="Danny Fryer",
     author_email="17fryerd@gmail.com",
     description=("query and analyze US Treasury yield data"),
@@ -36,4 +36,9 @@ setuptools.setup(
         "requests",
         "matplotlib"
     ],
+    project_urls={
+        "Bug Tracker":"https://github.com/pepe454/treasury-curves/issues",
+        "Documentation": "https://treasury-curves.readthedocs.io/en/latest/",
+        "Source Code":"https://github.com/pepe454/treasury-curves",
+    }
 )

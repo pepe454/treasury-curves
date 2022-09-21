@@ -1,5 +1,4 @@
-[![Treasury Curves Logo](.github/logo.png)](.github/logo.png)
-
+[![Treasury Curves](https://raw.githubusercontent.com/pepe454/treasury-curves/99da353a3754284f5d81455af16e465f39687f77/.github/logo.png)](https://raw.githubusercontent.com/pepe454/treasury-curves/99da353a3754284f5d81455af16e465f39687f77/.github/logo.png)
 
 [![ci](https://github.com/pepe454/treasury-curves/actions/workflows/ci.yml/badge.svg)](https://github.com/pepe454/treasury-curves/actions/workflows/ci.yml)
 [![PyPi Version](https://img.shields.io/pypi/v/treasurycurves.svg)](https://pypi.python.org/pypi/treasurycurves/)
@@ -9,9 +8,9 @@
 
 Access and chart US Treasury Curve data
 
-Full document can be found at [treasury-curves.readthedocs.io](https://treasury-curves.readthedocs.io/en/latest/)
+Full documentation can be found at [treasury-curves.readthedocs.io](https://treasury-curves.readthedocs.io/en/latest/)
 
-&nbsp;
+<br/>
 
 # Selecting and plotting data
 
@@ -33,9 +32,9 @@ become inundated with yield curve data.
 Save your data in a spreadsheet using ``` export(curves_data, file_extension="csv") ``` and specify
 "csv" or "xlsx" to determine the file type.
 
-&nbsp;
+<br/>
 
-# Using treasurycurves module from the Command Line
+# Using treasurycurves from the Command Line
 
 Install through pip:
 
@@ -73,4 +72,4 @@ optional arguments:
                         File extension to save data (csv or xlsx), leave empty to avoid saving file
 ```
 
-&nbsp;
+<br/>

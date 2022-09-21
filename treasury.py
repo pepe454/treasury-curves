@@ -16,7 +16,11 @@ COLUMNS = ["1 Yr", "2 Yr", "5 Yr", "10 Yr", "20 Yr", "30 Yr"]
 
 
 def curves(date=None, allow_missing=False):
-    """get treasury curves for today or a specific date"""
+    """get treasury curves for today or a specific date
+
+    :param str date: a datetime str in the format YYYY-MM-DD
+    :param bool allow_missing: boolean flag that allows NaN values when True
+    """
     date = datetime.today().strftime(DATE_FMT) if date is None else date
     date = datetime.strptime(date, DATE_FMT)
     dt_str = date.strftime(DATE_FMT)
@@ -39,7 +43,13 @@ def curves(date=None, allow_missing=False):
 
 
 def plot(raw_curve_data, num_years=10, start_year=None, end_year=None):
-    """plot treasury curves over the past num_years. alternatively use start_year, end_year"""
+    """plot treasury curves over the past num_years. alternatively use start_year, end_year
+
+    :param pandas.DataFrame raw_curve_data: treasury curve data with index Year
+    :param int num_years: number of years to plot, default is 10
+    :param int start_year: first year to begin plotting data
+    :param int end_year: last year to consider when plotting
+    """
     curve_data = filter_curves(raw_curve_data, num_years, start_year, end_year)
     date = curve_data.Date.max().strftime("%B %d")
     curve_data = curve_data.drop("Date", axis=1)[COLUMNS]
@@ -73,7 +83,11 @@ def filter_curves(curve_data, num_years=10, start_year=None, end_year=None):
 
 
 def export(curves_data, file_extension="csv"):
-    """export curves data analysis to a desired output format"""
+    """export curves data analysis to a desired output format
+
+    :param pandas.DataFrame curves_data: dataframe containing treasury curve data
+    :param str file_extension: the file type to export. can be "csv" or "xlsx"
+    """
     assert file_extension in {"csv", "xlsx"}, "unsupported extension, use csv or xlsx"
     file_dir = os.path.dirname(os.path.realpath(__file__))
     export_dir = os.path.join(file_dir, "exports")
