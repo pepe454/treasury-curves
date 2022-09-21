@@ -15,8 +15,10 @@ def curve_data():
     curve_data["2 YR"] = 0.5
     curve_data["5 YR"] = 0.75
     curve_data["10 YR"] = 1
-    curve_data ["30 YR"] = 1.5
+    curve_data["20 YR"] = 1.1
+    curve_data["30 YR"] = 1.5
     return curve_data
+
 
 def test_filter_curves(curve_data):
     # use num_years alone

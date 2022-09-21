@@ -8,6 +8,7 @@ setuptools.setup(
     description=("query and analyze US Treasury yield data"),
     packages=setuptools.find_packages(),
     py_modules=["treasury"],
+    license="MIT",
     url="https://github.com/pepe454/treasury-curves",
     entry_points={
         "console_scripts": ["treasury=treasury:main"]
