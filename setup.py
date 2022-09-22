@@ -8,7 +8,7 @@ def readme():
 
 setuptools.setup(
     name="treasurycurves",
-    version="1.0.3",
+    version="1.0.4",
     author="Danny Fryer",
     author_email="17fryerd@gmail.com",
     description=("query and analyze US Treasury yield data"),
