@@ -63,7 +63,7 @@ optional arguments:
   -a, --allowna         Allow NaN values
   -s START, --start START
                         Year to start analysis
-  -e END, --end END     Year to end analysis
+  -e END, --end END     Year to end analysis. If equal to start, analyze curves for the year
   -d DATE, --date DATE  Date in YYYY-MM-DD to analyze
   -y YEARS, --years YEARS
                         Num years before end to analyze

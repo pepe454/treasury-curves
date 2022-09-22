@@ -66,8 +66,8 @@ def yearly_curves(year, allow_missing=False):
 
 def plot(raw_curve_data, num_years=10, start_year=None, end_year=None):
     """plot treasury curves over the past num_years. alternatively use start_year, end_year
+    as a range. if start_year equals end_year, plot yearly data over the 12 months
 
-    if start_year == end_year, plot yearly data over the 12 months
     :param pandas.DataFrame raw_curve_data: treasury curve data with index Year
     :param int num_years: number of years to plot, default is 10
     :param int start_year: first year to begin plotting data
@@ -75,7 +75,7 @@ def plot(raw_curve_data, num_years=10, start_year=None, end_year=None):
     """
     curve_data = filter_curves(raw_curve_data, num_years, start_year, end_year)
     yearly = start_year == end_year
-    date = curve_data.Date.max().strftime("%B %d")  if yearly else start_year
+    date = curve_data.Date.max().strftime("%B %d") if not yearly else start_year
     curve_data = curve_data.drop("Date", axis=1)[COLUMNS]
 
     # format the ploat and the legend to look nice
@@ -179,7 +179,8 @@ def main():
     # filter arguments
     parser.add_argument("-a", "--allowna", action="store_true", help="Allow NaN values")
     parser.add_argument("-s", "--start", type=int, help="Year to start analysis")
-    parser.add_argument("-e", "--end", type=int, help="Year to end analysis")
+    help_msg = "Year to end analysis. If equal to start, analyze curves for the year"
+    parser.add_argument("-e", "--end", type=int, help=help_msg)
     parser.add_argument("-d", "--date", type=str, help="Date in YYYY-MM-DD to analyze")
     parser.add_argument("-y", "--years", type=int, default=10, help="Num years before end to analyze")
 
@@ -187,10 +188,15 @@ def main():
     parser.add_argument("-p", "--plot", action="store_true", help="Plot yield curves")
     help_msg = "File extension to save data (csv or xlsx), leave empty to avoid saving file"
     parser.add_argument("-o", "--output", type=str, help=help_msg)
+    args = parser.parse_args()
+
+    # if start == end, use yearly curves instead of all data
+    if args.start != args.end:
+        curve_data = curves(date=args.date, allow_missing=args.allowna)
+    else:
+        curve_data = yearly_curves(year=args.start, allow_missing=args.allowna)
 
     # analyze!
-    args = parser.parse_args()
-    curve_data = curves(date=args.date, allow_missing=args.allowna)
     if args.plot:
         plot(curve_data, num_years=args.years, start_year=args.start, end_year=args.end)
     if args.output is not None:
