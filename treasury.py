@@ -3,6 +3,7 @@
 import functools
 import os
 from argparse import ArgumentParser
+from calendar import month
 from datetime import datetime
 from io import StringIO
 
@@ -42,6 +43,27 @@ def curves(date=None, allow_missing=False):
     return year_samples.reset_index().set_index(keys="Year")
 
 
+def yearly_curves(year, allow_missing=False):
+    """get the yearly curve over months for different treasury durations
+
+    :param int year: the year to analyze
+    :param bool allow_missing: boolean flag that allows NaN values when True
+    """
+    drop_columns = [] if allow_missing else COLUMNS
+    curve_data = download_year(year).dropna(subset=drop_columns)
+
+    # now get 1 sample per month for plotting
+    curve_months = curve_data.groupby(curve_data.index.month)
+    month_samples = curve_months.apply(lambda month: month.sample(n=1))
+
+    # clean the index
+    month_samples.index = month_samples.index.set_names(["Month", "Date"])
+    month_samples = month_samples.reset_index()
+    to_month = lambda m: datetime.strptime(str(m), "%m").strftime("%b")
+    month_samples["Month"] = month_samples["Month"].apply(to_month)
+    return month_samples.set_index(keys="Month")
+
+
 def plot(raw_curve_data, num_years=10, start_year=None, end_year=None):
     """plot treasury curves over the past num_years. alternatively use start_year, end_year
 
@@ -66,7 +88,7 @@ def plot(raw_curve_data, num_years=10, start_year=None, end_year=None):
     return curve_data
 
 
-def filter_curves(curve_data, num_years=10, start_year=None, end_year=None):
+def filter_curves(curve_data, num_years=12, start_year=None, end_year=None):
     """filter treasury curve data using year filters"""
     start = curve_data.index.min() if start_year is None else int(start_year)
     end = curve_data.index.max() if end_year is None else int(end_year)
@@ -77,8 +99,8 @@ def filter_curves(curve_data, num_years=10, start_year=None, end_year=None):
     curves = curve_data.sort_values(by="Date", ascending=only_start)
     curves = curves[(curves.index >= start_year) & (curves.index <= end_year)]
 
-    # bound num years by [1, 10] and get the first num_years rows
-    num_years = min(10, max(num_years, 1))
+    # bound num years by [1, 12] and get the first num_years rows
+    num_years = min(12, max(num_years, 1))
     return curves.head(num_years)
 
 
@@ -111,6 +133,13 @@ def download():
     all_data = pd.concat([current_data, archive_data]).set_index(keys="Date")
     all_data.index = pd.to_datetime(all_data.index)
     return all_data
+
+
+def download_year(year):
+    """retrieve all curve data for a year"""
+    dt_year = datetime.now().replace(year=year)
+    url = year_url(dt_year)
+    return parse_csv_request(requests.get(url))
 
 
 def archive_url():

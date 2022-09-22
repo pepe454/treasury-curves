@@ -1,3 +1,4 @@
+from datetime import datetime
 from unittest import mock
 
 import numpy as np
@@ -43,6 +44,24 @@ def test_curves(curve_data):
 
     # un-mock the download
     treasury.download = original_download
+
+
+def test_yearly_curves(curve_data):
+    # mock download to guarantee consistency
+    original_download = treasury.download
+    months = [datetime.strptime(str(m), "%m").strftime("%b") for m in range(1, 13)]
+
+    # all data should come within the year, and index should contain all months
+    for year in [2010, 2012, 2015, 2018, 2019]:
+        year_data = curve_data[curve_data.index.year == year]
+        treasury.download_year = mock.MagicMock(return_value=year_data)
+        monthly_data = treasury.yearly_curves(year)
+        assert list(monthly_data.index) == months
+        assert np.all(monthly_data["Date"].dt.year == year)
+
+    # un-mock the download
+    treasury.download = original_download
+
 
 
 def test_filter_curves(curve_data):
