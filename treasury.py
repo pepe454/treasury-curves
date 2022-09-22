@@ -67,20 +67,24 @@ def yearly_curves(year, allow_missing=False):
 def plot(raw_curve_data, num_years=10, start_year=None, end_year=None):
     """plot treasury curves over the past num_years. alternatively use start_year, end_year
 
+    if start_year == end_year, plot yearly data over the 12 months
     :param pandas.DataFrame raw_curve_data: treasury curve data with index Year
     :param int num_years: number of years to plot, default is 10
     :param int start_year: first year to begin plotting data
     :param int end_year: last year to consider when plotting
     """
     curve_data = filter_curves(raw_curve_data, num_years, start_year, end_year)
-    date = curve_data.Date.max().strftime("%B %d")
+    yearly = start_year == end_year
+    date = curve_data.Date.max().strftime("%B %d")  if yearly else start_year
     curve_data = curve_data.drop("Date", axis=1)[COLUMNS]
 
     # format the ploat and the legend to look nice
     plt.close("all")
-    start, end = curve_data.index.min(), curve_data.index.max()
+    start, end = ("Jan", "Dec") if yearly else (curve_data.index.min(), curve_data.index.max())
+    xlabel, ylabel = ("Maturity", "Yield") if not yearly else ("Month", "Yield")
     title = f"US Treasury Yields {start}-{end}, {date}"
-    chart = curve_data.T.plot(xlabel="Maturity", ylabel="Yield", title=title, figsize=(10, 5))
+    curve_data = curve_data.T if yearly else curve_data
+    chart = curve_data.T.plot(xlabel=xlabel, ylabel=ylabel, title=title, figsize=(10, 5))
     chart.legend(bbox_to_anchor=(1.0, 1.0))
 
     # show the plot and done!
@@ -88,8 +92,10 @@ def plot(raw_curve_data, num_years=10, start_year=None, end_year=None):
     return curve_data
 
 
-def filter_curves(curve_data, num_years=12, start_year=None, end_year=None):
-    """filter treasury curve data using year filters"""
+def filter_curves(curve_data, num_years=10, start_year=None, end_year=None):
+    """filter treasury curve data using year filters, if start=end don't filter"""
+    if start_year is not None and start_year == end_year:
+        return curve_data
     start = curve_data.index.min() if start_year is None else int(start_year)
     end = curve_data.index.max() if end_year is None else int(end_year)
     assert start <= end, "start_year must be earlier than end_year"
@@ -100,7 +106,7 @@ def filter_curves(curve_data, num_years=12, start_year=None, end_year=None):
     curves = curves[(curves.index >= start_year) & (curves.index <= end_year)]
 
     # bound num years by [1, 12] and get the first num_years rows
-    num_years = min(12, max(num_years, 1))
+    num_years = min(10, max(num_years, 1))
     return curves.head(num_years)
 
 
@@ -139,7 +145,9 @@ def download_year(year):
     """retrieve all curve data for a year"""
     dt_year = datetime.now().replace(year=year)
     url = year_url(dt_year)
-    return parse_csv_request(requests.get(url))
+    year_data = parse_csv_request(requests.get(url)).set_index(keys="Date")
+    year_data.index = pd.to_datetime(year_data.index)
+    return year_data
 
 
 def archive_url():
