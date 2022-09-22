@@ -1,4 +1,4 @@
-[![Treasury Curves](https://raw.githubusercontent.com/pepe454/treasury-curves/99da353a3754284f5d81455af16e465f39687f77/.github/logo.png)](https://raw.githubusercontent.com/pepe454/treasury-curves/99da353a3754284f5d81455af16e465f39687f77/.github/logo.png)
+[![Treasury Curves](https://raw.githubusercontent.com/pepe454/treasury-curves/main/.github/logo.png)](https://raw.githubusercontent.com/pepe454/treasury-curves/main/.github/logo.png)
 
 [![ci](https://github.com/pepe454/treasury-curves/actions/workflows/ci.yml/badge.svg)](https://github.com/pepe454/treasury-curves/actions/workflows/ci.yml)
 [![PyPi Version](https://img.shields.io/pypi/v/treasurycurves.svg)](https://pypi.python.org/pypi/treasurycurves/)
