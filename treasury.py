@@ -75,7 +75,7 @@ def plot(raw_curve_data, num_years=10, start_year=None, end_year=None):
     """
     curve_data = filter_curves(raw_curve_data, num_years, start_year, end_year)
     yearly = start_year == end_year
-    date = curve_data.Date.max().strftime("%B %d") if not yearly else start_year
+    date = curve_data.Date.max().strftime("%B") if not yearly else start_year
     curve_data = curve_data.drop("Date", axis=1)[COLUMNS]
 
     # format the ploat and the legend to look nice
@@ -103,7 +103,7 @@ def filter_curves(curve_data, num_years=10, start_year=None, end_year=None):
     # use start and end year to filter the index
     only_start = start_year is not None and end_year is None
     curves = curve_data.sort_values(by="Date", ascending=only_start)
-    curves = curves[(curves.index >= start_year) & (curves.index <= end_year)]
+    curves = curves[(curves.index >= start) & (curves.index <= end)]
 
     # bound num years by [1, 12] and get the first num_years rows
     num_years = min(10, max(num_years, 1))
